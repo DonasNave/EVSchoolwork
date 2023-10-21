@@ -10,70 +10,67 @@ __name__ = "benchmark_functions"
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} x_i^2$",
 )
 def dejong1(x):
-    hp.normalize_function_input(x, -500, 500)
     return sum(xi**2 for xi in x)
 
 
+# TODO: Decide to do with unavailable 2D
+# @hp.set_function_info(
+#     name="De Jong 2",
+#     source="MatInf presentation",
+#     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\left[100 \\cdot (x_{i+1} - x_i^2)^2 + (1 - x_i)^2\\right]$",
+# )
+# def dejong2(x):
+#     result = 0
+#     for i in range(len(x) - 1):
+#         result += 100 * (x[i + 1] - x[i] ** 2) ** 2 + (1 - x[i]) ** 2
+#     return result
+
+
+# MatInf presentation
 @hp.set_function_info(
-    name="De Jong 2",
+    name="Schwefel's function",
     source="MatInf presentation",
-    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} (x_i^2 - 10\\cos(2\\pi x_i) + 10)$",
+    formula="$f(\\mathbf{x}) = 418.9829n - \\sum_{i=1}^{n} x_i \\sin(\\sqrt{|x_i|})$",
 )
-def dejong2(x):
+def schwefel(x):
+    result = 418.9829 * len(x) - sum(xi * np.sin(np.sqrt(abs(xi))) for xi in x)
+    return result
+
+
+# Jamil
+@hp.set_function_info(
+    name="Ackley's 1st function",
+    source="M. Jamil et al.",
+    formula="$f(\\mathbf{x}) = -20 \\exp\\left(-0.2 \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\\right) - \\exp\\left(\\frac{1}{n} \\sum_{i=1}^{n} \\cos(2\\pi x_i)\\right) + 20 + e$",
+)
+def ackley(x):
     n = len(x)
-    return sum(xi**2 - 10 * np.cos(2 * np.pi * xi) + 10 for xi in x)
+    sum1 = sum(xi**2 for xi in x)
+    sum2 = sum(np.cos(2 * np.pi * xi) for xi in x)
+    result = -20 * np.exp(-0.2 * np.sqrt(sum1 / n)) - np.exp(sum2 / n) + 20 + np.e
+    return result
 
 
-# # MatInf presentation
-# @hp.set_function_info(name="Schwefel's function", source="MatInf presentation")
-# def schwefel(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v)):
-#         result += -v[i] * np.sin(np.sqrt(np.abs(v[i])))
-#     return result
+# Jamil
+@hp.set_function_info(
+    name="Alpine 1st function",
+    source="M. Jamil et al.",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |x_i \\sin(x_i) + 0.1x_i|$",
+)
+def alpine1(x):
+    result = sum(abs(xi * np.sin(xi) + 0.1 * xi) for xi in x)
+    return result
 
 
-# # Jamil
-# @hp.set_function_info(name="Ackley's 1st function", source="M. Jamil et al.")
-# def ackley1(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v)):
-#         result += v[i] ** 2
-#     result = -20 * np.exp(-0.2 * np.sqrt(result / len(v)))
-
-#     sum_of_cosines = 0
-
-#     for i in range(len(v)):
-#         v[i] *= 2 * np.pi
-#         sum_of_cosines += np.cos(v[i])
-
-#     # Calculate the second part of the result
-#     part2 = 20 - np.exp(sum_of_cosines / len(v))
-
-#     result += part2
-#     return result
-
-
-# # Jamil
-# @hp.set_function_info(name="Alpine 1st function", source="M. Jamil et al.")
-# def alpine1(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v)):
-#         result += np.abs(v[i] * np.sin(v[i]) + 0.1 * v[i])
-#     return result
-
-
-# # Jamil
-# @hp.set_function_info(name="Alpine 2nd function", source="M. Jamil et al.")
-# def alpine2(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v)):
-#         result *= np.sqrt(v[i]) * np.sin(v[i])
-#     return result
+# Jamil
+@hp.set_function_info(
+    name="Alpine 2nd function",
+    source="M. Jamil et al.",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\sin(x_i) \\sin(\\sqrt{|x_i|})$",
+)
+def alpine2(x):
+    result = sum(np.sin(xi) * np.sin(np.sqrt(abs(xi))) for xi in x)
+    return result
 
 
 # # Jamil

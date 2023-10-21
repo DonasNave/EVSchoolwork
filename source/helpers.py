@@ -4,7 +4,7 @@ import numpy as np
 def normalize_function_input(v, lower_bound, upper_bound):
     result = []
     for i in range(len(v)):
-        result.append((v[i] - lower_bound) / (upper_bound - lower_bound))
+        result.append((v[i] - lower_bound) / 2 * (upper_bound - lower_bound))
     return result
 
 

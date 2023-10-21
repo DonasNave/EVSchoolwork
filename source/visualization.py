@@ -4,23 +4,24 @@ from mpl_toolkits.mplot3d import Axes3D
 
 
 def visualize_function(func, bounds=(-100, 100), num_points=100):
-    x = np.linspace(bounds[0], bounds[1], num_points)
+    vec_x = np.linspace(bounds[0], bounds[1], num_points)
+    vec_y = np.linspace(bounds[0], bounds[1], num_points)
 
     # Create a figure with separate subplots for 2D and 3D
     fig = plt.figure(figsize=(12, 5))
 
     # 2D plot
     ax1 = fig.add_subplot(121)
-    y = [func([xi]) for xi in x]
-    ax1.plot(x, y)
+    y = [func([xi]) for xi in vec_x]
+    ax1.plot(vec_x, y)
     ax1.set_xlabel("X")
     ax1.set_ylabel("Function Value")
     ax1.set_title("2D Function Visualization")
 
     # 3D plot
-    x_3d = np.linspace(bounds[0], bounds[1], num_points)
-    y_3d = np.linspace(bounds[0], bounds[1], num_points)
-    X, Y = np.meshgrid(x_3d, y_3d)
+    z = np.zeros_like(vec_x)
+
+    X, Y = np.meshgrid(vec_x, vec_y)
     Z = np.zeros_like(X)
 
     for i in range(num_points):
