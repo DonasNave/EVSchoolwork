@@ -2,33 +2,40 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def visualize_2d_function(func, bounds=(-100, 100), num_points=100):
+
+def visualize_function(func, bounds=(-100, 100), num_points=100):
     x = np.linspace(bounds[0], bounds[1], num_points)
+
+    # Create a figure with separate subplots for 2D and 3D
+    fig = plt.figure(figsize=(12, 5))
+
+    # 2D plot
+    ax1 = fig.add_subplot(121)
     y = [func([xi]) for xi in x]
+    ax1.plot(x, y)
+    ax1.set_xlabel("X")
+    ax1.set_ylabel("Function Value")
+    ax1.set_title("2D Function Visualization")
 
-    plt.plot(x, y)
-    plt.xlabel("X")
-    plt.ylabel("Function Value")
-    plt.title("2D Function Visualization")
-    plt.grid(True)
-    plt.show()
-
-def visualize_3d_function(func, bounds=(-100, 100), num_points=100):
-    x = np.linspace(bounds[0], bounds[1], num_points)
-    y = np.linspace(bounds[0], bounds[1], num_points)
-    X, Y = np.meshgrid(x, y)
+    # 3D plot
+    x_3d = np.linspace(bounds[0], bounds[1], num_points)
+    y_3d = np.linspace(bounds[0], bounds[1], num_points)
+    X, Y = np.meshgrid(x_3d, y_3d)
     Z = np.zeros_like(X)
 
     for i in range(num_points):
         for j in range(num_points):
-            Z[i, j] = func([X[i, j], Y[i, j]])  # Replace with your own function
+            Z[i, j] = func([X[i, j], Y[i, j]])
 
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(X, Y, Z)
+    ax2 = fig.add_subplot(122, projection="3d")
+    ax2.plot_surface(X, Y, Z)
+    ax2.set_xlabel("X")
+    ax2.set_ylabel("Y")
+    ax2.set_zlabel("Function Value", labelpad=-25)
+    ax2.set_title("3D Function Visualization")
 
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_zlabel("Function Value")
-    ax.set_title("3D Function Visualization")
+    # Set the suptitle with custom name and source
+    custom_name = getattr(func, "_custom_name", "Function")
+    fig.suptitle(custom_name)
+    plt.tight_layout()
     plt.show()
