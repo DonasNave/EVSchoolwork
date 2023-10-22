@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-def visualize_function(func, bounds=(-100, 100), num_points=100):
+def visualize_function(func, bounds=(-100, 100), num_points=140):
     vec_x = np.linspace(bounds[0], bounds[1], num_points)
     vec_y = np.linspace(bounds[0], bounds[1], num_points)
 

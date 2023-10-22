@@ -89,6 +89,7 @@ def alpine2(x):
     name="Csendes function",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} (x_i^6(2 + \\sin(1/x_i)))$",
+    bounds=(-1, 1),
 )
 def csendes(x):
     result = sum(xi**6 * (2 + np.sin(1 / xi)) for xi in x)
@@ -150,6 +151,7 @@ def griewank(x):
     name="Quartic",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} i x_i^4$",
+    bounds=(-1.28, 1.28),
 )
 def quartic(x):
     result = sum((i + 1) * xi**4 for i, xi in enumerate(x))
@@ -226,4 +228,54 @@ def levy(x):
     term3 = (w[n - 1] - 1) ** 2 * (1 + np.sin(2 * np.pi * w[n - 1]) ** 2)
 
     result = term1 + term2 + term3
+    return result
+
+
+@hp.set_function_info(
+    name="Rastrigin",
+    source="[1] - LLM's unmodified version",
+    formula="$f(\\mathbf{x}) = 10n + \\sum_{i=1}^{n} (x_i^2 - 10\\cos(2\\pi x_i))$",
+    bounds=(-5.12, 5.12),
+)
+def rastrigin(x):
+    n = len(x)
+    result = 10 * n + sum(xi**2 - 10 * np.cos(2 * np.pi * xi) for xi in x)
+    return result
+
+
+@hp.set_function_info(
+    name="Michalewicz",
+    source="[1] - LLM's unmodified version",
+    formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\sin(x_i) \\sin^{2i}(x_i^2/\\pi)$",
+    bounds=(0, np.pi),
+)
+def michalewicz(x):
+    result = -sum(
+        np.sin(xi) * np.sin((i + 1) * xi**2 / np.pi) ** 20 for i, xi in enumerate(x)
+    )
+    return result
+
+
+@hp.set_function_info(
+    name="Zakharov",
+    source="[1] - LLM unmodified input, 2nd try",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} x_i^2 + \\left(\\sum_{i=1}^{n} 0.5i x_i\\right)^2 + \\left(\\sum_{i=1}^{n} 0.5i x_i\\right)^4$",
+    bounds=(-10, 10),
+)
+def zakharov(x):
+    term1 = sum(xi**2 for xi in x)
+    term2 = sum((0.5 * (i + 1) * xi for i, xi in enumerate(x))) ** 2
+    term3 = sum((0.5 * (i + 1) * xi for i, xi in enumerate(x))) ** 4
+    result = term1 + term2 + term3
+    return result
+
+
+@hp.set_function_info(
+    name="Styblinski-Tang",
+    source="[1] - LLM's unmodified version",
+    formula="$f(\\mathbf{x}) = \\frac{1}{2} \\sum_{i=1}^{n} (x_i^4 - 16x_i^2 + 5x_i)$",
+    bounds=(-5, 5),
+)
+def styblinski_tang(x):
+    result = 0.5 * sum(xi**4 - 16 * xi**2 + 5 * xi for xi in x)
     return result
