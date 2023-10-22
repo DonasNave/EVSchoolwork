@@ -301,3 +301,28 @@ def svanda_1(x):
 def svanda_2(x):
     result = -sum(1 / np.sqrt(np.abs(xi)) * np.cos(xi) for xi in x)
     return result
+
+
+@hp.set_function_info(
+    name="Svanda 3rd",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |x_i - 0.42 \\min(|x_j|)| \\cdot |x_i| \\cdot \\sin\\left(\\frac{x_i}{4}\\right)$",
+)
+def svanda_3(x):
+    min_abs_x = min(abs(xi) for xi in x) * 0.42
+    result = sum(abs(abs(xi) - min_abs_x) * abs(xi) * np.sin(xi / 4) for xi in x)
+    return result
+
+
+@hp.set_function_info(
+    name="Svanda 4th",
+    source="Custom function",
+    formula="$f(\\mathbf{x}) = \\left|\\sum_{i=1}^{n} \\left(\\frac{1}{1 + e^{x_i}} + \\frac{x_i^2}{600}\\right)\\right| + \\frac{6}{0.5 + 0.1 \\cdot \\lVert \\mathbf{x} \\rVert}$",
+)
+def svanda_4(x):
+    origin = np.zeros(len(x))
+    distance = np.linalg.norm(x - origin)
+    result = abs(sum(1 / (1 + np.exp(xi)) + (xi**2 / 600) for xi in x)) + 6 / (
+        0.5 + distance * 0.1
+    )
+    return result
