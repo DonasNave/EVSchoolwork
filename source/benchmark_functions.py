@@ -279,3 +279,25 @@ def zakharov(x):
 def styblinski_tang(x):
     result = 0.5 * sum(xi**4 - 16 * xi**2 + 5 * xi for xi in x)
     return result
+
+
+@hp.set_function_info(
+    name="Svanda 1st",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\frac{x_i}{3} \\cos(x_i) + \\sum_{i=1}^{n} \\frac{x_i}{2} \\cos\\left(\\frac{2}{3}x_i\\right)$",
+)
+def svanda_1(x):
+    result = sum(xi / 3 * np.cos(xi) for xi in x) + sum(
+        xi / 2 * np.cos(xi * 2 / 3) for xi in x
+    )
+    return result
+
+
+@hp.set_function_info(
+    name="Svanda 2nd",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\frac{1}{\\sqrt{|x_i|}} \\cos(x_i)$",
+)
+def svanda_2(x):
+    result = -sum(1 / np.sqrt(np.abs(xi)) * np.cos(xi) for xi in x)
+    return result
