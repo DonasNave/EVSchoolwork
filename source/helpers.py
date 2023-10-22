@@ -24,3 +24,11 @@ def set_function_info(name, source, formula, bounds=(-100, 100)):
         return func
 
     return decorator
+
+
+class Particle:
+    def __init__(self, num_dimensions):
+        self.position = np.random.rand(num_dimensions)
+        self.velocity = np.random.rand(num_dimensions)
+        self.best_position = self.position
+        self.best_value = float("inf")
