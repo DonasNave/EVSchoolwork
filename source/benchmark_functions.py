@@ -62,28 +62,6 @@ def alpine2(x):
     return result
 
 
-# # Jamil
-# @hp.set_function_info(name="Brown function", source="M. Jamil et al.")
-# def brown(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v) - 1):
-#         result += (v[i] ** 2) ** (v[i + 1] ** 2 + 1) + (v[i + 1] ** 2) ** (
-#             v[i] ** 2 + 1
-#         )
-#     return result
-
-
-# # Jamil - very simple
-# @hp.set_function_info(name="Chung Reynolds function", source="M. Jamil et al.")
-# def chung_reynolds(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v) - 1):
-#         result += i**2
-#     return result**2
-
-
 # Jamil
 @hp.set_function_info(
     name="Csendes function",
@@ -94,29 +72,6 @@ def alpine2(x):
 def csendes(x):
     result = sum(xi**6 * (2 + np.sin(1 / xi)) for xi in x)
     return result
-
-
-# # copilot
-# @hp.set_function_info(name="Exponential function", source="Github copilot autocomplete")
-# def exponential(v):
-#     hp.normalize_function_input(v, -500, 500)
-#     result = 0
-#     for i in range(len(v)):
-#         result += np.exp(-2 * np.log(2) * ((v[i] - 0.1) / 0.8) ** 2) * (
-#             np.sin(5 * np.pi * v[i]) ** 6
-#         )
-#     return -result
-
-
-# # Jamil - [-1, 1]
-# @hp.set_function_info(name="Exponential function v2", source="M. Jamil et al.")
-# def exponential2(v):
-#     hp.normalize_function_input(v, -1, 1)
-#     result = 0
-#     for i in range(len(v)):
-#         result += i**2
-#     result *= -0.5
-#     return np.exp(result) * -1
 
 
 # Jamil - [-100, 100]
@@ -132,20 +87,6 @@ def griewank(x):
     return result
 
 
-# # Jamil
-# @hp.set_function_info(name="Pathological function", source="M. Jamil et al.")
-# def pathological(v):
-#     hp.normalize_function_input(v, -100, 100)
-#     result = 0
-#     for i in range(len(v)):
-#         result += (
-#             0.5
-#             + (np.sin(np.sqrt(100 * v[i] ** 2))) ** 2
-#             - 0.5 / (1 + 0.001 * v[i] ** 2) ** 2
-#         )
-#     return result
-
-
 # Jamil
 @hp.set_function_info(
     name="Quartic",
@@ -156,60 +97,6 @@ def griewank(x):
 def quartic(x):
     result = sum((i + 1) * xi**4 for i, xi in enumerate(x))
     return result
-
-
-# # Jamil
-# @hp.set_function_info(name="Rosenbrock function", source="M. Jamil et al.")
-# def rosenbrock(v):
-#     hp.normalize_function_input(v, -30, 30)
-#     result = 0
-#     for i in range(len(v) - 1):
-#         result += 100 * (v[i + 1] - v[i] ** 2) ** 2 + (v[i] - 1) ** 2
-#     return result
-
-
-# TODO: Solve 2D
-# # Jamil
-# @hp.set_function_info(
-#     name="Schaffer f6 function",
-#     source="M. Jamil et al.",
-#     formula="$f(\\mathbf{x}) = 0.5 + \\frac{\\sin^2(\\sqrt{x_1^2 + x_2^2}) - 0.5}{[1 + 0.001(x_1^2 + x_2^2)]^2}$",
-# )
-# def schaffer_f6(x):
-#     if len(x) != 2:
-#         raise ValueError("Schaffer F6 function is defined for n = 2")
-#     x1, x2 = x
-#     result = (
-#         0.5
-#         + (np.sin(np.sqrt(x1**2 + x2**2)) ** 2 - 0.5)
-#         / (1 + 0.001 * (x1**2 + x2**2)) ** 2
-#     )
-#     return result
-
-
-# Jamil
-@hp.set_function_info(
-    name="Schwefel 2.22",
-    source="M. Jamil et al.",
-    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |x_i| + \\prod_{i=1}^{n} |x_i|$",
-)
-def schwefel_222(x):
-    result = sum([abs(xi) for xi in x]) + np.prod([abs(xi) for xi in x])
-    return result
-
-
-# # Jamil
-# @hp.set_function_info(name="Weirerstrass function", source="M. Jamil et al.")
-# def weirerstrass(v):
-#     hp.normalize_function_input(v, -0.5, 0.5)
-#     result = 0
-#     for i in range(len(v)):
-#         for j in range(21):
-#             result += 0.5**j * np.cos(2 * np.pi * 3**j * (v[i] + 0.5))
-#     result2 = 0
-#     for j in range(21):
-#         result2 += 0.5**j * np.cos(2 * np.pi * 3**j * 0.5)
-#     return result - len(v) * result2
 
 
 @hp.set_function_info(
@@ -324,5 +211,52 @@ def svanda_4(x):
     distance = np.linalg.norm(x - origin)
     result = abs(sum(1 / (1 + np.exp(xi)) + (xi**2 / 600) for xi in x)) + 6 / (
         0.5 + distance * 0.1
+    )
+    return result
+
+
+@hp.set_function_info(
+    name="LLM - Customized 1",
+    source="LLM prompt with context",
+    formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\frac{1}{\\sqrt{|x_i| + 1}} \\cos(2x_i)$",
+)
+def custom_1_llm(x):
+    result = -sum(1 / np.sqrt(np.abs(xi) + 1) * np.cos(2 * xi) for xi in x)
+    return result
+
+
+@hp.set_function_info(
+    name="LLM - Customized 2",
+    source="LLM prompt with context",
+    formula="$f(\\mathbf{x}) = \\left|\\sum_{i=1}^{n} \\left(\\frac{1}{1 + e^{2x_i}} + \\frac{x_i^3}{800}\\right)\\right| + \\frac{7}{0.6 + 0.15 \\cdot \\lVert \\mathbf{x} \\rVert}$",
+)
+def custom_2_llm(x):
+    origin = np.zeros(len(x))
+    distance = np.linalg.norm(x - origin)
+    result = abs(sum(1 / (1 + np.exp(2 * xi)) + (xi**3 / 800) for xi in x)) + 7 / (
+        0.6 + distance * 0.15
+    )
+    return result
+
+
+@hp.set_function_info(
+    name="LLM - Wavy Peaks",
+    source="LLM prompt with context",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\sin(3x_i) + \\sum_{i=1}^{n} \\cos(2x_i)$",
+)
+def wavy_peaks_LLM(x):
+    result = sum(np.sin(3 * xi) + np.cos(2 * xi) for xi in x)
+    return result
+
+
+@hp.set_function_info(
+    name="Pronounced Twisted Valleys",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |3x_i^3 - 4x_i^2\\sin(2x_i) + 2\\cos(3x_i)|$",
+    bounds=(-5.12, 5.12),
+)
+def pronounced_twisted_valleys(x):
+    result = sum(
+        abs(3 * xi**3 - 4 * xi**2 * np.sin(2 * xi) + 2 * np.cos(3 * xi)) for xi in x
     )
     return result
