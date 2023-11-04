@@ -32,6 +32,7 @@ def schwefel(x):
     name="Ackley's 1st function",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = -20 \\exp\\left(-0.2 \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\\right) - \\exp\\left(\\frac{1}{n} \\sum_{i=1}^{n} \\cos(2\\pi x_i)\\right) + 20 + e$",
+    bounds=(-5.12, 5.12),
 )
 def ackley(x):
     n = len(x)
@@ -203,7 +204,7 @@ def svanda_3(x):
 
 @hp.set_function_info(
     name="Svanda 4th",
-    source="Custom function",
+    source="Custom made",
     formula="$f(\\mathbf{x}) = \\left|\\sum_{i=1}^{n} \\left(\\frac{1}{1 + e^{x_i}} + \\frac{x_i^2}{600}\\right)\\right| + \\frac{6}{0.5 + 0.1 \\cdot \\lVert \\mathbf{x} \\rVert}$",
 )
 def svanda_4(x):
@@ -212,6 +213,26 @@ def svanda_4(x):
     result = abs(sum(1 / (1 + np.exp(xi)) + (xi**2 / 600) for xi in x)) + 6 / (
         0.5 + distance * 0.1
     )
+    return result
+
+
+@hp.set_function_info(
+    name="Svanda 5th",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\sin(x_i) \\sqrt{|x_i|} x_i \\mod 4$",
+)
+def svanda_5(x):
+    result = sum(np.sin(xi) * np.sqrt(np.abs(xi)) * (xi % 4) for xi in x)
+    return result
+
+
+@hp.set_function_info(
+    name="Svanda 6",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\tan^2(\\frac{x_i}{8}) x_i \\mod 10$",
+)
+def svanda_6(x):
+    result = -sum((np.tan(xi / 8) ** 2) * (xi % 10) for xi in x)
     return result
 
 
@@ -260,3 +281,29 @@ def pronounced_twisted_valleys(x):
         abs(3 * xi**3 - 4 * xi**2 * np.sin(2 * xi) + 2 * np.cos(3 * xi)) for xi in x
     )
     return result
+
+
+@hp.set_function_info(
+    name="Michalewicz Altered",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\sin(x_i) \\sin((i + 1)|x_i| / \\sqrt{\\pi})^{20}$",
+)
+def michalewicz_altered(x):
+    result = -sum(
+        np.sin(xi) * np.sin((i + 1) * np.abs(xi) / np.sqrt(np.pi)) ** 20
+        for i, xi in enumerate(x)
+    )
+    return result
+
+
+@hp.set_function_info(
+    name="Ackley Altered",
+    source="Custom made",
+    formula="$f(\\mathbf{x}) = -20 \\exp\\left(-0.2 \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\\right) - \\exp\\left(\\frac{1}{n} \\sum_{i=1}^{n} \\cos(2\\pi x_i)\\right) + 20 + e$",
+)
+def ackley_altered(x):
+    n = len(x)
+    sum1 = sum(xi**2 for xi in x)
+    sum2 = sum(np.cos(2 * np.pi * xi) for xi in x)
+    result = -20 * np.exp(-0.2 * np.sqrt(sum1 / n) + np.exp(sum2 / n) + 20 + np.e)
+    return result % 4
