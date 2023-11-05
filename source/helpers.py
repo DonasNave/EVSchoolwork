@@ -1,6 +1,20 @@
 import numpy as np
 
 
+def rank_array(arr):
+    sorted_arr = sorted(arr)
+    rank_dict = {value: rank for rank, value in enumerate(sorted_arr, start=1)}
+    ranked_array = [rank_dict[value] for value in arr]
+    return ranked_array
+
+
+def print_ranked_array(arr):
+    ranked = rank_array(arr)
+    formatted_ranks = ["{:>2}".format(rank) for rank in ranked]
+    result = " | ".join(formatted_ranks)
+    print(result)
+
+
 def normalize_function_input(v, lower_bound, upper_bound):
     result = []
     for i in range(len(v)):

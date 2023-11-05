@@ -40,3 +40,7 @@ def visualize_function(func, bounds=(-100, 100), num_points=140):
     fig.suptitle(custom_name)
     plt.tight_layout()
     plt.show()
+
+
+def visualize_benchmark_results(results):
+    pass
