@@ -115,7 +115,7 @@ def soma_all_to_one(
     num_dimensions = len(bounds)
     particles = [hp.Particle(num_dimensions) for _ in range(num_particles)]
 
-    for iteration in range(max_generations):
+    for _ in range(max_generations):
         for particle in particles:
             value = objective_function(particle.position)
             if value < particle.best_value:
@@ -169,7 +169,7 @@ def soma_all_to_all(
     num_dimensions = len(bounds)
     particles = [hp.Particle(num_dimensions) for _ in range(num_particles)]
 
-    for iteration in range(max_generations):
+    for _ in range(max_generations):
         for i, particle in enumerate(particles):
             value = objective_function(particle.position)
             if value < particle.best_value:
