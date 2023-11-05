@@ -1,6 +1,14 @@
 import numpy as np
 
 
+def table_header():
+    result = "{:>20} |".format("Function")
+    functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
+    formatted_funcs = ["{:>17}".format(func) for func in functions]
+    result = " | ".join(formatted_funcs)
+    return result
+
+
 def rank_array(arr):
     sorted_arr = sorted(arr)
     rank_dict = {value: rank for rank, value in enumerate(sorted_arr, start=1)}
@@ -8,11 +16,11 @@ def rank_array(arr):
     return ranked_array
 
 
-def print_ranked_array(arr):
+def printable_ranked_array(arr):
     ranked = rank_array(arr)
-    formatted_ranks = ["{:>2}".format(rank) for rank in ranked]
+    formatted_ranks = ["{:>17}".format(rank) for rank in ranked]
     result = " | ".join(formatted_ranks)
-    print(result)
+    return result
 
 
 def normalize_function_input(v, lower_bound, upper_bound):

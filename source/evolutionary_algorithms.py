@@ -26,11 +26,13 @@ def differential_evolution(
             target = population[i]
 
             if strategy == "best/1/bin":
-                a, b = np.random.choice(population, 2, replace=False)
+                indices = np.random.choice(population_size, 2, replace=False)
+                a, b = population[indices]
                 best = best_solution
                 mutant = best + F * (a - b)
             elif strategy == "rand/1/bin":
-                a, b, c = np.random.choice(population, 3, replace=False)
+                indices = np.random.choice(population_size, 3, replace=False)
+                a, b, c = population[indices]
                 mutant = a + F * (b - c)
             else:
                 raise ValueError("Invalid strategy")
@@ -154,7 +156,7 @@ def soma_all_to_all(
     best_global_solution = None
     best_global_value = float("inf")
 
-    populations = []
+    populations = [(best_global_solution, best_global_value)] * num_particles
 
     for _ in range(num_populations):
         best_solution, best_value = differential_evolution(
