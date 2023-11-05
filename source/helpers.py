@@ -2,11 +2,26 @@ import numpy as np
 
 
 def table_header():
-    result = "{:>20} |".format("Function")
+    result = "| {:<19} | ".format("Function")
     functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
-    formatted_funcs = ["{:>17}".format(func) for func in functions]
-    result = " | ".join(formatted_funcs)
-    return result
+    formatted_funcs = ["{:^17}".format(func) for func in functions]
+    result += " | ".join(formatted_funcs)
+    result += " |"
+    table_separator()
+    print(result)
+    table_separator()
+
+
+def table_separator():
+    print("-" * 123)
+
+
+def table_row(name, array):
+    result = "| {:<19} | ".format(name)
+    formatted_ranks = ["{:^17}".format(rank) for rank in array]
+    result += " | ".join(formatted_ranks)
+    result += " |"
+    print(result)
 
 
 def rank_array(arr):
