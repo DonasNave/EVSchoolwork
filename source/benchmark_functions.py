@@ -227,7 +227,7 @@ def svanda_5(x):
 
 
 @hp.set_function_info(
-    name="Svanda 6",
+    name="Svanda 6th",
     source="Custom made",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\tan^2(\\frac{x_i}{8}) x_i \\mod 10$",
 )
