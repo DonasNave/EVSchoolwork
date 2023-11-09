@@ -11,20 +11,23 @@ def differential_evolution(
     CR=0.7,
     strategy="best/1/bin",
 ):
+    # Initialize population
     num_dimensions = len(bounds)
     population = np.random.uniform(
         bounds[:, 0], bounds[:, 1], size=(population_size, num_dimensions)
     )
+    # Initialize best solution
     best_solution = population[
         np.argmin([objective_function(candidate) for candidate in population])
     ]
 
-    for generation in range(max_generations):
+    for _ in range(max_generations):
         new_population = []
 
         for i in range(population_size):
             target = population[i]
 
+            # Act out strategy
             if strategy == "best/1/bin":
                 indices = np.random.choice(population_size, 2, replace=False)
                 a, b = population[indices]
@@ -37,14 +40,20 @@ def differential_evolution(
             else:
                 raise ValueError("Invalid strategy")
 
+            # Bounce
+            mutant = hp.bounce_vector(mutant, bounds)
+
+            # Crossover
             crossover_mask = np.random.rand(num_dimensions) < CR
             trial = np.where(crossover_mask, mutant, target)
 
+            # Selection
             if objective_function(trial) < objective_function(target):
                 new_population.append(trial)
             else:
                 new_population.append(target)
 
+        # Update population, best solution
         population = np.array(new_population)
         best_solution = population[
             np.argmin([objective_function(candidate) for candidate in population])
@@ -55,6 +64,7 @@ def differential_evolution(
 
 def particle_swarm_optimization(
     objective_function,
+    bounds,
     num_particles,
     num_dimensions,
     max_iterations,
@@ -62,11 +72,11 @@ def particle_swarm_optimization(
     cognitive_weight=1.49618,
     social_weight=1.49618,
 ):
-    particles = [hp.Particle(num_dimensions) for _ in range(num_particles)]
+    particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
     global_best_position = None
     global_best_value = float("inf")
 
-    for iteration in range(max_iterations):
+    for _ in range(max_iterations):
         for particle in particles:
             value = objective_function(particle.position)
             if value < particle.best_value:
@@ -84,7 +94,9 @@ def particle_swarm_optimization(
                 + cognitive_weight * r1 * (particle.best_position - particle.position)
                 + social_weight * r2 * (global_best_position - particle.position)
             )
-            particle.position += particle.velocity
+            particle.position = hp.bounce_vector(
+                particle.position + particle.velocity, bounds=bounds
+            )
 
     return global_best_position, global_best_value
 
@@ -115,7 +127,7 @@ def soma_all_to_one(
 
     global_best_position = best_global_solution
     num_dimensions = len(bounds)
-    particles = [hp.Particle(num_dimensions) for _ in range(num_particles)]
+    particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
 
     for _ in range(max_generations):
         for particle in particles:
@@ -169,7 +181,7 @@ def soma_all_to_all(
 
     global_best_position = best_global_solution
     num_dimensions = len(bounds)
-    particles = [hp.Particle(num_dimensions) for _ in range(num_particles)]
+    particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
 
     for _ in range(max_generations):
         for i, particle in enumerate(particles):

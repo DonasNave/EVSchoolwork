@@ -63,9 +63,32 @@ def set_function_info(name, source, formula, bounds=(-100, 100)):
     return decorator
 
 
+def bounce_vector(vector, bounds):
+    """
+    Calculate the bounce of a vector within specified bounds.
+
+    Parameters:
+    - vector (list): The input vector.
+    - bounds (list of tuples): The lower and upper bounds for each component of the vector.
+
+    Returns:
+    - list: The bounced vector.
+    """
+
+    lower_bounds, upper_bounds = bounds[:, 0], bounds[:, 1]
+
+    # Bounce if the value exceeds the bounds
+    bounced_vector = np.where(vector < lower_bounds, lower_bounds, vector)
+    bounced_vector = np.where(vector > upper_bounds, upper_bounds, bounced_vector)
+
+    return bounced_vector
+
+
 class Particle:
-    def __init__(self, num_dimensions):
-        self.position = np.random.rand(num_dimensions)
-        self.velocity = np.random.rand(num_dimensions)
-        self.best_position = self.position
+    def __init__(self, num_dimensions, bounds):
+        self.position = np.random.uniform(
+            bounds[:, 0], bounds[:, 1], size=num_dimensions
+        )
+        self.velocity = np.random.uniform(-1, 1, size=num_dimensions)
+        self.best_position = self.position.copy()
         self.best_value = float("inf")
