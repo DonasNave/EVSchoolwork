@@ -67,7 +67,7 @@ def particle_swarm_optimization(
     bounds,
     num_particles,
     num_dimensions,
-    max_iterations,
+    max_evaluations,
     inertia_weight=0.7298,
     cognitive_weight=1.49618,
     social_weight=1.49618,
@@ -75,10 +75,13 @@ def particle_swarm_optimization(
     particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
     global_best_position = None
     global_best_value = float("inf")
+    evaluations = 0
 
-    for _ in range(max_iterations):
+    while evaluations < max_evaluations:
         for particle in particles:
             value = objective_function(particle.position)
+            evaluations += 1
+
             if value < particle.best_value:
                 particle.best_value = value
                 particle.best_position = particle.position

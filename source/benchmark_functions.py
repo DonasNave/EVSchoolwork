@@ -19,7 +19,7 @@ def dejong1(x):
 
 
 @hp.set_function_info(
-    name="Schwefel's function",
+    name="Schwefel",
     source="MatInf presentation",
     formula="$f(\\mathbf{x}) = 418.9829n - \\sum_{i=1}^{n} x_i \\sin(\\sqrt{|x_i|})$",
 )
@@ -29,7 +29,7 @@ def schwefel(x):
 
 
 @hp.set_function_info(
-    name="Ackley's 1st function",
+    name="Ackley 1st",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = -20 \\exp\\left(-0.2 \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\\right) - \\exp\\left(\\frac{1}{n} \\sum_{i=1}^{n} \\cos(2\\pi x_i)\\right) + 20 + e$",
     bounds=(-5.12, 5.12),
@@ -54,7 +54,7 @@ def alpine1(x):
 
 # Jamil
 @hp.set_function_info(
-    name="Alpine 2nd function",
+    name="Alpine 2nd",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\sin(x_i) \\sin(\\sqrt{|x_i|})$",
 )
@@ -65,7 +65,7 @@ def alpine2(x):
 
 # Jamil
 @hp.set_function_info(
-    name="Csendes function",
+    name="Csendes",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} (x_i^6(2 + \\sin(1/x_i)))$",
     bounds=(-1, 1),
@@ -187,7 +187,12 @@ def svanda_1(x):
     formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\frac{1}{\\sqrt{|x_i|}} \\cos(x_i)$",
 )
 def svanda_2(x):
-    result = -sum(1 / np.sqrt(np.abs(xi)) * np.cos(xi) for xi in x)
+    result = 0
+    for xi in x:
+        if np.abs(xi) > 0:
+            result -= 1 / np.sqrt(np.abs(xi)) * np.cos(xi)
+        else:
+            result -= np.inf
     return result
 
 
@@ -271,7 +276,7 @@ def wavy_peaks_LLM(x):
 
 
 @hp.set_function_info(
-    name="Pronounced Twisted Valleys",
+    name="Twisted Valleys",
     source="Custom made",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |3x_i^3 - 4x_i^2\\sin(2x_i) + 2\\cos(3x_i)|$",
     bounds=(-5.12, 5.12),
