@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import source.helpers as hp
 
@@ -78,18 +79,21 @@ def particle_swarm_optimization(
     evaluations = 0
 
     while evaluations < max_evaluations:
+        # Update values
         for particle in particles:
             value = objective_function(particle.position)
-            evaluations += 1
 
+            # Update local best
             if value < particle.best_value:
                 particle.best_value = value
                 particle.best_position = particle.position
 
+            # Update global best
             if value < global_best_value:
                 global_best_value = value
                 global_best_position = particle.position
 
+        # Update positions
         for particle in particles:
             r1, r2 = np.random.rand(), np.random.rand()
             particle.velocity = (
@@ -101,114 +105,62 @@ def particle_swarm_optimization(
                 particle.position + particle.velocity, bounds=bounds
             )
 
+        # Update evaluations
+        evaluations += num_particles
+
     return global_best_position, global_best_value
 
 
-def soma_all_to_one(
+def soma(
     objective_function,
     bounds,
-    num_populations=5,
-    population_size=50,
-    max_generations=100,
-    F=0.5,
-    CR=0.7,
-    num_particles=30,
-    inertia_weight=0.7,
-    cognitive_weight=1.5,
-    social_weight=1.5,
+    population_size,
+    migrations,
+    path_length,
+    step,
+    prt,
+    num_dimensions,
 ):
-    best_global_solution = None
-    best_global_value = float("inf")
+    particles = [hp.Particle(num_dimensions, bounds) for _ in range(population_size)]
+    global_best_position = None
+    global_best_value = float("inf")
 
-    for _ in range(num_populations):
-        best_solution, best_value = differential_evolution(
-            objective_function, bounds, population_size, max_generations, F, CR
-        )
-        if best_value < best_global_value:
-            best_global_value = best_value
-            best_global_solution = best_solution
-
-    global_best_position = best_global_solution
-    num_dimensions = len(bounds)
-    particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
-
-    for _ in range(max_generations):
+    for _ in migrations:
+        new_particles = []
+        # Update values
         for particle in particles:
             value = objective_function(particle.position)
+
+            # Update local best
             if value < particle.best_value:
                 particle.best_value = value
                 particle.best_position = particle.position
 
-            if value < best_global_value:
-                best_global_value = value
+            # Update global best
+            if value < global_best_value:
+                global_best_value = value
                 global_best_position = particle.position
 
+        # Update positions
         for particle in particles:
-            r1, r2 = np.random.rand(), np.random.rand()
-            particle.velocity = (
-                inertia_weight * particle.velocity
-                + cognitive_weight * r1 * (particle.best_position - particle.position)
-                + social_weight * r2 * (global_best_position - particle.position)
-            )
-            particle.position += particle.velocity
+            # Generate PRT vector
+            random_numbers = [np.random.random() for _ in range(num_dimensions)]
+            prt_vector = [0 if num > prt else 1 for num in random_numbers]
 
-    return best_global_solution, best_global_value
+            best_variant = particle
+            for t in range(0, path_length, step):
+                mutant = particle + (
+                    global_best_position - particle.position * t * prt_vector
+                )
+                mutant = hp.bounce_vector(mutant, bounds)
+                mutant_value = objective_function(mutant.position)
 
+                if mutant_value < best_value:
+                    best_value = mutant_value
+                    best_variant = mutant
 
-def soma_all_to_all(
-    objective_function,
-    bounds,
-    num_populations=5,
-    population_size=50,
-    max_generations=100,
-    F=0.5,
-    CR=0.7,
-    num_particles=30,
-    inertia_weight=0.7,
-    cognitive_weight=1.5,
-    social_weight=1.5,
-):
-    best_global_solution = None
-    best_global_value = float("inf")
+            new_particles.append(best_variant)
 
-    populations = [(best_global_solution, best_global_value)] * num_particles
+        particles = new_particles
 
-    for _ in range(num_populations):
-        best_solution, best_value = differential_evolution(
-            objective_function, bounds, population_size, max_generations, F, CR
-        )
-        if best_value < best_global_value:
-            best_global_value = best_value
-            best_global_solution = best_solution
-        populations.append((best_solution, best_value))
-
-    global_best_position = best_global_solution
-    num_dimensions = len(bounds)
-    particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
-
-    for _ in range(max_generations):
-        for i, particle in enumerate(particles):
-            value = objective_function(particle.position)
-            if value < particle.best_value:
-                particle.best_value = value
-                particle.best_position = particle.position
-
-            # Update global best based on best of all populations
-            if value < best_global_value:
-                best_global_value = value
-                global_best_position = particle.position
-
-            # Update local best for this population based on the best in its population
-            if value < populations[i][1]:
-                populations[i] = (particle.position, value)
-
-        for particle in particles:
-            r1, r2 = np.random.rand(), np.random.rand()
-            particle.velocity = (
-                inertia_weight * particle.velocity
-                + cognitive_weight * r1 * (particle.best_position - particle.position)
-                + social_weight * r2 * (global_best_position - particle.position)
-            )
-            particle.position += particle.velocity
-
-    return best_global_solution, best_global_value
+    return global_best_position, global_best_value
