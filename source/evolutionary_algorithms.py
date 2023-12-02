@@ -67,12 +67,12 @@ def particle_swarm_optimization(
     objective_function,
     bounds,
     num_particles,
-    num_dimensions,
     max_evaluations,
     inertia_weight=0.7298,
     cognitive_weight=1.49618,
     social_weight=1.49618,
 ):
+    num_dimensions = len(bounds)
     particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
     global_best_position = None
     global_best_value = float("inf")
@@ -116,25 +116,27 @@ def soma_ato(
     bounds,
     population_size,
     migrations,
-    path_length,
-    step,
-    prt,
-    num_dimensions,
+    path_length=3,
+    step=0.11,
+    prt=0.7,
 ):
-    particles = [hp.Particle(num_dimensions, bounds) for _ in range(population_size)]
+    num_dimensions = len(bounds)
+    particles = np.random.uniform(
+        bounds[:, 0], bounds[:, 1], size=(population_size, num_dimensions)
+    )
     global_best_position = None
     global_best_value = float("inf")
 
-    for _ in migrations:
+    for _ in range(migrations):
         new_particles = []
         # Update values
         for particle in particles:
-            value = objective_function(particle.position)
+            value = objective_function(particle)
 
             # Update global best
             if value < global_best_value:
                 global_best_value = value
-                global_best_position = particle.position
+                global_best_position = particle
 
         # Migrate particles
         for particle in particles:
@@ -143,22 +145,22 @@ def soma_ato(
             prt_vector = [0 if num > prt else 1 for num in random_numbers]
 
             # Setup best particle position
-            best_position = particle
-            best_value = objective_function(particle.position)
+            best_particle = particle
+            best_value = objective_function(particle)
+
+            particle_direction = global_best_position - particle * prt_vector
 
             # Crete migration steps
-            for t in range(0, path_length, step):
-                moved_particle = particle + (
-                    global_best_position - particle.position * t * prt_vector
-                )
+            for t in np.arange(0, path_length, step):
+                moved_particle = particle + particle_direction * t
                 moved_particle = hp.bounce_vector(moved_particle, bounds)
-                mutant_value = objective_function(moved_particle.position)
+                mutant_value = objective_function(moved_particle)
 
                 if mutant_value < best_value:
                     best_value = mutant_value
-                    best_position = moved_particle
+                    best_particle = moved_particle
 
-            new_particles.append(best_position)
+            new_particles.append(best_particle)
 
         # Update particles to migrated positions
         particles = new_particles
@@ -171,24 +173,28 @@ def soma_ata(
     bounds,
     population_size,
     migrations,
-    path_length,
-    step,
-    prt,
-    num_dimensions,
+    path_length=3,
+    step=0.11,
+    prt=0.7,
 ):
-    particles = [hp.Particle(num_dimensions, bounds) for _ in range(population_size)]
+    num_dimensions = len(bounds)
+
+    particles = np.random.uniform(
+        bounds[:, 0], bounds[:, 1], size=(population_size, num_dimensions)
+    )
+
     global_best_position = None
     global_best_value = float("inf")
 
     # All migrations
-    for _ in migrations:
+    for _ in range(migrations):
         # For each particle as leader
         for leader in particles:
-            global_best_position = leader.position
+            global_best_position = leader
 
             # Migrate all particles
             for particle in particles:
-                if particle == leader:
+                if np.all(particle == leader):
                     continue
 
                 # Generate PRT vector
@@ -196,21 +202,21 @@ def soma_ata(
                 prt_vector = [0 if num > prt else 1 for num in random_numbers]
 
                 # Setup best particle position
-                best_position = particle
-                best_value = objective_function(particle.position)
+                best_particle = particle
+                best_value = objective_function(particle)
+
+                particle_direction = global_best_position - particle * prt_vector
 
                 # Crete migration steps
-                for t in range(0, path_length, step):
-                    moved_particle = particle + (
-                        global_best_position - particle.position * t * prt_vector
-                    )
+                for t in np.arange(0, path_length, step):
+                    moved_particle = particle + particle_direction * t
                     moved_particle = hp.bounce_vector(moved_particle, bounds)
-                    mutant_value = objective_function(moved_particle.position)
+                    mutant_value = objective_function(moved_particle)
 
                     if mutant_value < best_value:
                         best_value = mutant_value
-                        best_position = moved_particle
+                        best_particle = moved_particle
 
-                particle.position = best_position
+                particle = best_particle
 
     return global_best_position, global_best_value
