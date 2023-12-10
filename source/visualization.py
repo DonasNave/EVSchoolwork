@@ -35,7 +35,7 @@ def visualize_function(func, bounds=(-100, 100), num_points=140):
     ax2.set_zlabel("Function Value", labelpad=-25)
     ax2.set_title("3D Function Visualization")
 
-    # Set the suptitle with custom name and source
+    # Set the subtitle with custom name and source
     custom_name = getattr(func, "_custom_name", "Function")
     fig.suptitle(custom_name)
     plt.tight_layout()

@@ -1,3 +1,4 @@
+from scipy.stats import friedmanchisquare
 import numpy as np
 
 
@@ -14,6 +15,10 @@ def table_header():
 
 def table_separator():
     print("-" * 123)
+
+
+def friedman_test(dimension_ranks):
+    return friedmanchisquare(*dimension_ranks)
 
 
 def table_row(name, array):
