@@ -219,4 +219,8 @@ def soma_ata(
 
                 particle = best_particle
 
+                if best_value < objective_function(global_best_position):
+                    global_best_position = particle
+                    global_best_value = best_value
+
     return global_best_position, global_best_value
