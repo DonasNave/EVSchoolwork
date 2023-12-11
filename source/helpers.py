@@ -13,6 +13,17 @@ def table_header():
     table_separator()
 
 
+def table_footer(dim_results):
+    result = "| {:<19} | ".format("Average Rank")
+    average_ranks = np.mean(dim_results, axis=0)
+    formatted_ranks = ["{:^17}".format(rank) for rank in average_ranks]
+    result += " | ".join(formatted_ranks)
+    result += " |"
+    table_separator()
+    print(result)
+    table_separator()
+
+
 def table_separator():
     print("-" * 123)
 
