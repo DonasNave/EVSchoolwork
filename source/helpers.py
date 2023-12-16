@@ -5,20 +5,29 @@ import os
 
 
 def table_header():
-    result = "| {:<19} | ".format("Function/Rank Avg.")
+    result = "| {:>19} | ".format("Evo. Algorithm →")
     functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
     formatted_funcs = ["{:^17}".format(func) for func in functions]
     result += " | ".join(formatted_funcs)
     result += " | "
-    result += "{:^10}".format("Avg. Diff.")
+    result += "{:^10}".format("Rank Avg.")
     result += " |"
     table_separator()
+    print(result)
+
+    result = "| {:<19} | ".format("Benchmark ↓")
+    functions = ["(Rank)", "(Rank)", "(Rank)", "(Rank)", "(Rank)"]
+    formatted_funcs = ["{:^17}".format(func) for func in functions]
+    result += " | ".join(formatted_funcs)
+    result += " | "
+    result += "{:^10}".format("(Diff)")
+    result += " |"
     print(result)
     table_separator()
 
 
 def table_footer(average_ranks, average_distance):
-    result = "| {:<19} | ".format("Average")
+    result = "| {:<19} | ".format("Total Avg. Rank")
     formatted_ranks = ["{:^17.2f}".format(rank) for rank in average_ranks]
     result += " | ".join(formatted_ranks)
     result += " | "
