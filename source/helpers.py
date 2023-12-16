@@ -1,43 +1,70 @@
 from scipy.stats import friedmanchisquare
 import numpy as np
+import json
+import os
 
 
 def table_header():
-    result = "| {:<19} | ".format("Function")
+    result = "| {:<19} | ".format("Function/Rank")
     functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
     formatted_funcs = ["{:^17}".format(func) for func in functions]
     result += " | ".join(formatted_funcs)
+    result += " | "
+    result += "{:^10}".format("Avg. Diff.")
     result += " |"
     table_separator()
     print(result)
     table_separator()
 
 
-def table_footer(dim_results):
-    result = "| {:<19} | ".format("Average Rank")
-    average_ranks = np.mean(dim_results, axis=0)
+def table_footer(average_ranks, average_distance):
+    result = "| {:<19} | ".format("Average")
     formatted_ranks = ["{:^17}".format(rank) for rank in average_ranks]
     result += " | ".join(formatted_ranks)
+    result += " | "
+    result += "{:^10.4f}".format(average_distance)
     result += " |"
     table_separator()
     print(result)
     table_separator()
+
+
+def table_row(name, array, distance):
+    result = "| {:<19} | ".format(name)
+    formatted_ranks = ["{:^17}".format(rank) for rank in array]
+    result += " | ".join(formatted_ranks)
+    result += " | "
+    result += "{:^10.4f}".format(distance)
+    result += " |"
+    print(result)
 
 
 def table_separator():
-    print("-" * 123)
+    print("-" * 136)
+
+
+def euclidean_distance(vector1, vector2):
+    return np.linalg.norm(np.array(vector1) - np.array(vector2))
+
+
+# saving results (2D array) to a file
+def save_results(results, filename):
+    with open(filename, "w") as f:
+        json.dump(results, f, indent=4)
+
+
+def load_results(filename):
+    results = {}
+
+    if os.path.exists(filename):
+        with open(filename, "r") as f:
+            results = json.load(f)
+
+    return results
 
 
 def friedman_test(dimension_ranks):
     return friedmanchisquare(*dimension_ranks)
-
-
-def table_row(name, array):
-    result = "| {:<19} | ".format(name)
-    formatted_ranks = ["{:^17}".format(rank) for rank in array]
-    result += " | ".join(formatted_ranks)
-    result += " |"
-    print(result)
 
 
 def rank_array(arr):
