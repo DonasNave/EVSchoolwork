@@ -9,7 +9,7 @@ def differential_evolution(
     population_size=50,
     max_generations=100,
     F=0.5,
-    CR=0.7,
+    CR=0.9,
     strategy="best/1/bin",
 ):
     # Initialize population
