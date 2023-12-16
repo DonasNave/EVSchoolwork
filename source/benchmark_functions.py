@@ -38,7 +38,7 @@ def ackley(x):
 
 
 @hp.set_function_info(
-    name="Alpine 1st function",
+    name="Alpine 1st",
     source="M. Jamil et al.",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |x_i \\sin(x_i) + 0.1x_i|$",
 )
@@ -237,7 +237,7 @@ def svanda_6(x):
 
 
 @hp.set_function_info(
-    name="LLM - Customized 1",
+    name="Custom 1 (LLM)",
     source="LLM prompt with context",
     formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\frac{1}{\\sqrt{|x_i| + 1}} \\cos(2x_i)$",
 )
@@ -247,7 +247,7 @@ def custom_1_llm(x):
 
 
 @hp.set_function_info(
-    name="LLM - Customized 2",
+    name="Custom 2 (LLM)",
     source="LLM prompt with context",
     formula="$f(\\mathbf{x}) = \\left|\\sum_{i=1}^{n} \\left(\\frac{1}{1 + e^{2x_i}} + \\frac{x_i^3}{800}\\right)\\right| + \\frac{7}{0.6 + 0.15 \\cdot \\lVert \\mathbf{x} \\rVert}$",
 )
@@ -261,7 +261,7 @@ def custom_2_llm(x):
 
 
 @hp.set_function_info(
-    name="LLM - Wavy Peaks",
+    name="Wavy (LLM)",
     source="LLM prompt with context",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} \\sin(3x_i) + \\sum_{i=1}^{n} \\cos(2x_i)$",
 )
@@ -272,7 +272,7 @@ def wavy_peaks_LLM(x):
 
 @hp.set_function_info(
     name="Twisted Valleys",
-    source="Custom made",
+    source="Custom made - LLM result altered",
     formula="$f(\\mathbf{x}) = \\sum_{i=1}^{n} |3x_i^3 - 4x_i^2\\sin(2x_i) + 2\\cos(3x_i)|$",
     bounds=(-5.12, 5.12),
 )
@@ -284,8 +284,8 @@ def pronounced_twisted_valleys(x):
 
 
 @hp.set_function_info(
-    name="Michalewicz Altered",
-    source="Custom made",
+    name="Michalewicz Alt.",
+    source="Custom made - Michaelwicz altered",
     formula="$f(\\mathbf{x}) = -\\sum_{i=1}^{n} \\sin(x_i) \\sin((i + 1)|x_i| / \\sqrt{\\pi})^{20}$",
 )
 def michalewicz_altered(x):
@@ -297,8 +297,8 @@ def michalewicz_altered(x):
 
 
 @hp.set_function_info(
-    name="Ackley Altered",
-    source="Custom made",
+    name="Ackley 1st Alt.",
+    source="Custom made - Ackley altered",
     formula="$f(\\mathbf{x}) = -20 \\exp\\left(-0.2 \\sqrt{\\frac{1}{n} \\sum_{i=1}^{n} x_i^2}\\right) - \\exp\\left(\\frac{1}{n} \\sum_{i=1}^{n} \\cos(2\\pi x_i)\\right) + 20 + e$",
 )
 def ackley_altered(x):

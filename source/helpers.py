@@ -5,9 +5,9 @@ import os
 
 
 def table_header():
-    result = "| {:>19} | ".format("Evo. Algorithm →")
-    functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
-    formatted_funcs = ["{:^17}".format(func) for func in functions]
+    result = "| {:<16} | ".format("Evo. Algorithm →")
+    functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA ato", "SOMA ata"]
+    formatted_funcs = ["{:^10}".format(func) for func in functions]
     result += " | ".join(formatted_funcs)
     result += " | "
     result += "{:^10}".format("Rank Avg.")
@@ -15,9 +15,9 @@ def table_header():
     table_separator()
     print(result)
 
-    result = "| {:<19} | ".format("Benchmark ↓")
+    result = "| {:<16} | ".format("Benchmark ↓")
     functions = ["(Rank)", "(Rank)", "(Rank)", "(Rank)", "(Rank)"]
-    formatted_funcs = ["{:^17}".format(func) for func in functions]
+    formatted_funcs = ["{:^10}".format(func) for func in functions]
     result += " | ".join(formatted_funcs)
     result += " | "
     result += "{:^10}".format("(Diff)")
@@ -27,8 +27,8 @@ def table_header():
 
 
 def table_footer(average_ranks, average_distance):
-    result = "| {:<19} | ".format("Total Avg. Rank")
-    formatted_ranks = ["{:^17.2f}".format(rank) for rank in average_ranks]
+    result = "| {:<16} | ".format("Total Avg. Rank")
+    formatted_ranks = ["{:^10.2f}".format(rank) for rank in average_ranks]
     result += " | ".join(formatted_ranks)
     result += " | "
     result += "{:^10.2f}".format(average_distance)
@@ -39,8 +39,8 @@ def table_footer(average_ranks, average_distance):
 
 
 def table_row(name, array, distance):
-    result = "| {:<19} | ".format(name)
-    formatted_ranks = ["{:^17.2f}".format(rank) for rank in array]
+    result = "| {:<16} | ".format(name)
+    formatted_ranks = ["{:^10.2f}".format(rank) for rank in array]
     result += " | ".join(formatted_ranks)
     result += " | "
     result += "{:^10.2f}".format(distance)
@@ -49,7 +49,7 @@ def table_row(name, array, distance):
 
 
 def table_separator():
-    print("-" * 136)
+    print("-" * 98)
 
 
 def euclidean_distance(vector1, vector2):
