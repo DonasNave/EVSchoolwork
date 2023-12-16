@@ -1,12 +1,7 @@
 import numpy as np
 import source.helpers as hp
-import json
 
 __name__ = "benchmark_functions"
-
-# Load function's data from json file
-with open("./source/data.json", "r") as file:
-    data = json.load(file)
 
 
 @hp.set_function_info(

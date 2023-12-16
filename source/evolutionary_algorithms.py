@@ -7,7 +7,7 @@ def differential_evolution(
     objective_function,
     bounds,
     population_size=50,
-    max_generations=100,
+    max_evaluations=2000,
     F=0.5,
     CR=0.9,
     strategy="best/1/bin",
@@ -22,7 +22,9 @@ def differential_evolution(
         np.argmin([objective_function(candidate) for candidate in population])
     ]
 
-    for _ in range(max_generations):
+    evaluations = 0
+
+    while evaluations < max_evaluations:
         new_population = []
 
         for i in range(population_size):
@@ -60,6 +62,10 @@ def differential_evolution(
             np.argmin([objective_function(candidate) for candidate in population])
         ]
 
+        # Update evaluations
+        evaluations += population_size
+
+    population = []
     return best_solution, objective_function(best_solution)
 
 

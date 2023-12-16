@@ -5,7 +5,7 @@ import os
 
 
 def table_header():
-    result = "| {:<19} | ".format("Function/Rank")
+    result = "| {:<19} | ".format("Function/Rank Avg.")
     functions = ["DE Rand 1", "DE Best 1", "PSO", "SOMA all-to-one", "SOMA all-to-all"]
     formatted_funcs = ["{:^17}".format(func) for func in functions]
     result += " | ".join(formatted_funcs)
@@ -19,10 +19,10 @@ def table_header():
 
 def table_footer(average_ranks, average_distance):
     result = "| {:<19} | ".format("Average")
-    formatted_ranks = ["{:^17}".format(rank) for rank in average_ranks]
+    formatted_ranks = ["{:^17.2f}".format(rank) for rank in average_ranks]
     result += " | ".join(formatted_ranks)
     result += " | "
-    result += "{:^10.4f}".format(average_distance)
+    result += "{:^10.2f}".format(average_distance)
     result += " |"
     table_separator()
     print(result)
@@ -31,10 +31,10 @@ def table_footer(average_ranks, average_distance):
 
 def table_row(name, array, distance):
     result = "| {:<19} | ".format(name)
-    formatted_ranks = ["{:^17}".format(rank) for rank in array]
+    formatted_ranks = ["{:^17.2f}".format(rank) for rank in array]
     result += " | ".join(formatted_ranks)
     result += " | "
-    result += "{:^10.4f}".format(distance)
+    result += "{:^10.2f}".format(distance)
     result += " |"
     print(result)
 
