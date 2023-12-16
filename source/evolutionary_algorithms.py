@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 import source.helpers as hp
 
@@ -121,7 +120,7 @@ def soma_ato(
     objective_function,
     bounds,
     population_size,
-    migrations,
+    max_evaluations=2000,
     path_length=3,
     step=0.11,
     prt=0.7,
@@ -133,7 +132,9 @@ def soma_ato(
     global_best_position = None
     global_best_value = float("inf")
 
-    for _ in range(migrations):
+    evaluations = 0
+
+    while evaluations < max_evaluations:
         new_particles = []
         # Update values
         for particle in particles:
@@ -166,6 +167,8 @@ def soma_ato(
                     best_value = mutant_value
                     best_particle = moved_particle
 
+                evaluations += 1
+
             new_particles.append(best_particle)
 
         # Update particles to migrated positions
@@ -178,7 +181,7 @@ def soma_ata(
     objective_function,
     bounds,
     population_size,
-    migrations,
+    max_evaluations=2000,
     path_length=3,
     step=0.11,
     prt=0.7,
@@ -192,8 +195,9 @@ def soma_ata(
     global_best_position = None
     global_best_value = float("inf")
 
-    # All migrations
-    for _ in range(migrations):
+    evaluations = 0
+
+    while evaluations < max_evaluations:
         # For each particle as leader
         for leader in particles:
             global_best_position = leader
@@ -222,6 +226,8 @@ def soma_ata(
                     if mutant_value < best_value:
                         best_value = mutant_value
                         best_particle = moved_particle
+
+                    evaluations += 1
 
                 particle = best_particle
 
