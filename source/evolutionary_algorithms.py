@@ -134,6 +134,7 @@ def soma_ato(
 
     evaluations = 0
 
+    # To better compare with other algorithms, evaluations are counted instead of migrations
     while evaluations < max_evaluations:
         new_particles = []
         # Update values
@@ -147,19 +148,24 @@ def soma_ato(
 
         # Migrate particles
         for particle in particles:
-            # Generate PRT vector
-            random_numbers = [np.random.random() for _ in range(num_dimensions)]
-            prt_vector = [0 if num > prt else 1 for num in random_numbers]
+            # Skip leader
+            if np.all(particle == global_best_position):
+                new_particles.append(particle)
+                continue
 
-            # Setup best particle position
+            # Setup best particle position as current
             best_particle = particle
             best_value = objective_function(particle)
 
-            particle_direction = global_best_position - particle * prt_vector
-
             # Crete migration steps
             for t in np.arange(0, path_length, step):
-                moved_particle = particle + particle_direction * t
+                # Generate PRT vector
+                random_numbers = [np.random.random() for _ in range(num_dimensions)]
+                prt_vector = [0 if num > prt else 1 for num in random_numbers]
+                # Calculate direction
+                particle_direction = (global_best_position - particle) * prt_vector * t
+
+                moved_particle = particle + particle_direction
                 moved_particle = hp.bounce_vector(moved_particle, bounds)
                 mutant_value = objective_function(moved_particle)
 
@@ -197,6 +203,7 @@ def soma_ata(
 
     evaluations = 0
 
+    # To better compare with other algorithms, evaluations are counted instead of migrations
     while evaluations < max_evaluations:
         # For each particle as leader
         for leader in particles:
@@ -204,22 +211,25 @@ def soma_ata(
 
             # Migrate all particles
             for particle in particles:
+                # Skip leader
                 if np.all(particle == leader):
                     continue
-
-                # Generate PRT vector
-                random_numbers = [np.random.random() for _ in range(num_dimensions)]
-                prt_vector = [0 if num > prt else 1 for num in random_numbers]
 
                 # Setup best particle position
                 best_particle = particle
                 best_value = objective_function(particle)
 
-                particle_direction = global_best_position - particle * prt_vector
-
                 # Crete migration steps
                 for t in np.arange(0, path_length, step):
-                    moved_particle = particle + particle_direction * t
+                    # Generate PRT vector
+                    random_numbers = [np.random.random() for _ in range(num_dimensions)]
+                    prt_vector = [0 if num > prt else 1 for num in random_numbers]
+                    # Calculate direction
+                    particle_direction = (
+                        (global_best_position - particle) * prt_vector * t
+                    )
+
+                    moved_particle = particle + particle_direction
                     moved_particle = hp.bounce_vector(moved_particle, bounds)
                     mutant_value = objective_function(moved_particle)
 
