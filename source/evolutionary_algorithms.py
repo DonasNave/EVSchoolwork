@@ -150,10 +150,11 @@ def soma_ato(
         for particle in particles:
             # Skip leader
             if np.all(particle == global_best_position):
+                evaluations += 1
                 new_particles.append(particle)
                 continue
 
-            # Setup best particle position as current
+            # Setup best particle position in steps as current one
             best_particle = particle
             best_value = objective_function(particle)
 
@@ -213,6 +214,7 @@ def soma_ata(
             for particle in particles:
                 # Skip leader
                 if np.all(particle == leader):
+                    evaluations += 1
                     continue
 
                 # Setup best particle position
