@@ -1,3 +1,4 @@
+import sys
 from scipy.stats import friedmanchisquare
 import numpy as np
 import json
@@ -143,4 +144,4 @@ class Particle:
         )
         self.velocity = np.random.uniform(-1, 1, size=num_dimensions)
         self.best_position = self.position.copy()
-        self.best_value = float("inf")
+        self.best_value = sys.float_info.max

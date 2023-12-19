@@ -1,5 +1,8 @@
+import sys
 import numpy as np
 import source.helpers as hp
+
+MAX_VAL = sys.float_info.max
 
 
 def differential_evolution(
@@ -80,7 +83,7 @@ def particle_swarm_optimization(
     num_dimensions = len(bounds)
     particles = [hp.Particle(num_dimensions, bounds) for _ in range(num_particles)]
     global_best_position = None
-    global_best_value = float("inf")
+    global_best_value = MAX_VAL
     evaluations = 0
 
     while evaluations < max_evaluations:
@@ -130,7 +133,7 @@ def soma_ato(
         bounds[:, 0], bounds[:, 1], size=(population_size, num_dimensions)
     )
     global_best_position = None
-    global_best_value = float("inf")
+    global_best_value = MAX_VAL
 
     evaluations = 0
 
@@ -200,13 +203,14 @@ def soma_ata(
     )
 
     global_best_position = None
-    global_best_value = float("inf")
+    global_best_value = MAX_VAL
 
     evaluations = 0
-    new_particles = []
 
     # To better compare with other algorithms, evaluations are counted instead of migrations
     while evaluations < max_evaluations:
+        new_particles = []
+
         # Migrate all particles
         for particle in particles:
             # Setup best particle position
