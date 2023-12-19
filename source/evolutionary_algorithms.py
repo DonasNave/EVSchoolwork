@@ -244,6 +244,10 @@ def soma_ata(
                         best_value = mutant_value
                         best_particle = moved_particle
 
+                    if best_value < global_best_value:
+                        global_best_value = best_value
+                        global_best_position = best_particle
+
                     evaluations += 1
 
             new_particles.append(best_particle)
