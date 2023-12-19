@@ -203,23 +203,24 @@ def soma_ata(
     global_best_value = float("inf")
 
     evaluations = 0
+    new_particles = []
 
     # To better compare with other algorithms, evaluations are counted instead of migrations
     while evaluations < max_evaluations:
-        # For each particle as leader
-        for leader in particles:
-            global_best_position = leader
+        # Migrate all particles
+        for particle in particles:
+            # Setup best particle position
+            best_particle = particle
+            best_value = objective_function(particle)
 
-            # Migrate all particles
-            for particle in particles:
+            # For each other particle as leader
+            for leader in particles:
+                global_best_position = leader
+
                 # Skip leader
                 if np.all(particle == leader):
                     evaluations += 1
                     continue
-
-                # Setup best particle position
-                best_particle = particle
-                best_value = objective_function(particle)
 
                 # Crete migration steps
                 for t in np.arange(0, path_length, step):
@@ -241,10 +242,9 @@ def soma_ata(
 
                     evaluations += 1
 
-                particle = best_particle
+            new_particles.append(best_particle)
 
-                if best_value < objective_function(global_best_position):
-                    global_best_position = particle
-                    global_best_value = best_value
+        # Update particles to migrated positions
+        particles = new_particles
 
     return global_best_position, global_best_value
