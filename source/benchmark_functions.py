@@ -250,6 +250,7 @@ def custom_1_llm(x):
     name="Custom 2 (LLM)",
     source="LLM prompt with context",
     formula="$f(\\mathbf{x}) = \\left|\\sum_{i=1}^{n} \\left(\\frac{1}{1 + e^{2x_i}} + \\frac{x_i^3}{800}\\right)\\right| + \\frac{7}{0.6 + 0.15 \\cdot \\lVert \\mathbf{x} \\rVert}$",
+    bounds=(-30, 30),
 )
 def custom_2_llm(x):
     origin = np.zeros(len(x))
