@@ -131,8 +131,14 @@ def bounce_vector(vector, bounds):
     lower_bounds, upper_bounds = bounds[:, 0], bounds[:, 1]
 
     # Bounce if the value exceeds the bounds
-    bounced_vector = np.where(vector < lower_bounds, lower_bounds, vector)
-    bounced_vector = np.where(vector > upper_bounds, upper_bounds, bounced_vector)
+    bounced_vector = np.where(
+        vector < lower_bounds, lower_bounds + np.abs(vector - lower_bounds), vector
+    )
+    bounced_vector = np.where(
+        vector > upper_bounds,
+        upper_bounds - np.abs(vector - upper_bounds),
+        bounced_vector,
+    )
 
     return bounced_vector
 
